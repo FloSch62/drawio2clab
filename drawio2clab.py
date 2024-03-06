@@ -60,6 +60,7 @@ def extract_nodes(mxGraphModel):
         mgmt_ipv4 = obj.get('mgmt-ipv4', None)
         group = obj.get('group', None)
         labels = obj.get('labels', None)  # Assuming 'labels' is stored directly; adjust if it's more complex
+        node_kind = obj.get('kind', 'nokia_srlinux')
 
         # If label is not directly on the object, try to find it in a child mxCell
         if not node_label:
@@ -75,7 +76,8 @@ def extract_nodes(mxGraphModel):
                 'type': node_type,
                 'mgmt-ipv4': mgmt_ipv4,
                 'group': group,
-                'labels': labels
+                'labels': labels,
+                'kind': node_kind
             }
 
     # Process all mxCell elements that have vertex='1'
@@ -88,7 +90,10 @@ def extract_nodes(mxGraphModel):
             if not "image=data" in style:
                 continue
             if node_label:
-                node_details[node_id] = {'label': node_label, 'type': None}
+                node_details[node_id] = {
+                    'label': node_label,
+                    'kind': node_kind
+                }
 
     return node_details
 
@@ -160,15 +165,22 @@ def extract_link_labels(mxGraphModel, links_info):
 
 def aggregate_node_information(node_details):
     """
-    Aggregates node information by adding a 'kind' to each node's details based on predefined criteria
-    (e.g., identifying if a node is a 'linux' or 'nokia_srlinux' node). Returns a new dictionary with
-    updated node details.
+    Aggregates node information by potentially modifying the 'kind' for each node based on specific criteria.
+    If a 'kind' is explicitly provided, it is respected. If not, the function assigns 'linux' to nodes
+    with 'client' in their label, maintaining other kinds as defined or defaulting to 'nokia_srlinux'.
     """
     updated_node_details = {}
     for node_id, details in node_details.items():
-        # Determine the node's kind based on its label
-        node_kind = 'linux' if 'client' in details['label'] else 'nokia_srlinux'
-        # Copy existing details and add the determined kind
+        # Use the existing 'kind' if it's explicitly defined and not default 'nokia_srlinux', or
+        # apply custom logic to determine 'kind'.
+        if details.get('kind') and details.get('kind') != 'nokia_srlinux':
+            # 'kind' is explicitly provided, so we keep it.
+            node_kind = details['kind']
+        else:
+            # Apply custom logic: if 'client' in label, set as 'linux'; otherwise, keep existing or default to 'nokia_srlinux'.
+            node_kind = 'linux' if 'client' in details['label'] else details.get('kind', 'nokia_srlinux')
+        
+        # Update node details with potentially modified 'kind'.
         updated_details = details.copy()
         updated_details['kind'] = node_kind
         updated_node_details[node_id] = updated_details
@@ -241,7 +253,7 @@ def generate_yaml_structure(filtered_node_details, compiled_links, input_file):
         if node_kind not in kinds:
             kinds[node_kind] = {'image': 'ghcr.io/nokia/srlinux', 'type': 'ixrd3'} if node_kind == 'nokia_srlinux' \
                 else {'image': 'ghcr.io/hellt/network-multitool'} if node_kind == 'linux' \
-                else {}  # Add more conditions as necessary for other kinds
+                else {'image' : None }  # Add more conditions as necessary for other kinds
 
         # Prepare node information, conditionally including 'type' if it exists and is not None
         node_info = {'kind': node_kind}

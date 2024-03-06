@@ -2,6 +2,8 @@
 
 Drawio2Clab is a tool that converts .drawio diagrams to YAML format, specifically designed for network topologies. It parses XML files exported from draw.io (or diagrams.net), extracts information about nodes and links, and generates a structured YAML representation of the network. This process streamlines the setup of complex network topologies within [Containerlab](https://github.com/srl-labs/containerlab) environments, facilitating an easy and efficient way to manage container-based networking labs.
 
+If you need the opposite, to generate a drawio file from a clab file, [containerlab2diagram](https://github.com/FloSch62/containerlab2diagram) has you covered.
+
 ## Features
 
 - Converts .drawio diagrams to Containerlab-compatible YAML.
