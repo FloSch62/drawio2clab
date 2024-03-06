@@ -81,13 +81,13 @@ pip install -r requirements.txt
 Convert a .drawio file to YAML:
 
 ```bash
-python Drawio2Clab.py -i input_file.xml -o output_file.yaml
+python drawio2clab.py -i input_file.xml -o output_file.yaml
 ```
 
 Specify a diagram name and output style:
 
 ```bash
-python Drawio2Clab.py -i input_file.xml -o output_file.yaml --diagram-name "Diagram 1" --style flow
+python drawio2clab.py -i input_file.xml -o output_file.yaml --diagram-name "Diagram 1" --style flow
 ```
 
 ### Arguments
