@@ -90,7 +90,6 @@ def extract_nodes(mxGraphModel):
             if node_label:
                 node_details[node_id] = {'label': node_label, 'type': None}
 
-    print(node_details)
     return node_details
 
 
@@ -323,7 +322,6 @@ def main(input_file, output_file, style='block', diagram_name=None):
 
 
     node_details = aggregate_node_information(node_details)
-    print(node_details)
     compiled_links = compile_link_information(links_info, style)
     filtered_nodes = filter_nodes(links_info, node_details)
     yaml_data = generate_yaml_structure(filtered_nodes, compiled_links, input_file)

@@ -11,5 +11,5 @@ COPY requirements.txt /app/
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Run Drawio2Clab.py when the container launches
-CMD ["python", "./drawio2clab.py"]
+# Set the entry point to the Python interpreter
+ENTRYPOINT ["python", "drawio2clab.py"]
