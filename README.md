@@ -23,6 +23,7 @@ When creating your .drawio diagrams, please adhere to the following constraints 
 In addition to labeling, nodes can contain additional data to further define the network configuration. The following attributes can be added to a node:
 
 - `type`: Specify the type of the node. E.g., "ixrd2", "ixrd3".
+- `kind`: Specify the kind of the node, by default nokia_srlinux
 - `mgmt-ipv4`: Assign a management IPv4 address to the node.
 - `group`: Define a group to which the node belongs.
 - `labels`: Add custom labels for additional metadata or categorization.
